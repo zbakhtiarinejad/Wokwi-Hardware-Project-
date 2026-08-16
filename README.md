@@ -45,3 +45,32 @@ After introducing the resistor into the circuit, neither the cyan nor the magent
 1. Connected a wire directly from the right terminal of the resistor to the **GND** pin (**GND2) on the Raspberry Pi Pico.
 2. Verified that both LED cathodes (short legs) connect to the left side of the resistor.
 3. Confirmed that both LEDs successfully illuminate through the resistor when the pushbutton is held down.
+
+### What Was Added
+This update expands the Raspberry Pi Pico embedded control system by integrating a Common-Cathode RGB LED using multi-channel Pulse Width Modulation (PWM). The microcontroller concurrently handles GPIO input polling for standard indicator LEDs while executing a non-blocking color transition sequence across a predefined 8-bit RGB color palette.
+
+---
+
+## Technical Challenges & Engineering Solutions
+
+### 1. Circuit Polarity Mismatch
+
+* **Problem:** The RGB LED initially remained unlit despite active MicroPython PWM signals.
+* **Root Cause:** The Wokwi simulator component was set to **Common Anode**, which requires a constant 3.3V rail on the common terminal and inverted logic (`LOW` = ON). Driving standard active-HIGH PWM signals resulted in 0V potential difference across the LED channels.
+* **Fix:** Reconfigured the Wokwi component attribute to **Common Cathode** (`"common": "cathode"`) and wired the common terminal to Pico **GND**. This restored expected active-HIGH 16-bit PWM behavior (`0` = OFF, `65535` = full intensity).
+
+### 2. MicroPython Type Errors & Invalid API Parameters
+
+* **Problem:** Script execution threw runtime errors on initialization.
+* **Root Cause:** Capitalization syntax errors (`pin` instead of `Pin`) and passing a `Pin` object into `.freq()` rather than a numeric integer value in Hertz.
+* **Fix:** Standardized class imports from `machine` and updated PWM frequency calls to `r_pwm.freq(1000)` across all three channels.
+
+### 3. Execution Blocking & Sequential Loop Halts
+
+* **Problem:** Placing the pushbutton reading logic in a separate `while True` loop below the RGB loop caused the code to block permanently inside the first loop.
+* **Fix:** Unified system logic into a single, non-blocking main execution loop. The pushbutton state is polled continuously every 50ms without halting the timer sequence.
+
+### 4. Interval Timing Drift
+
+* **Problem:** Incrementing `timer += 1` after resetting `timer = 0` created an off-by-one timing shift (0.95 seconds instead of 1.0 second per color transition).
+* **Fix:** Adjusted loop counter execution sequence so `timer += 1` runs prior to evaluating `if timer >= 20:`. This guarantees precise 1.0-second state updates (20 × 0.05s) while resetting the counter cleanly to prevent unbounded integer memory growth.
