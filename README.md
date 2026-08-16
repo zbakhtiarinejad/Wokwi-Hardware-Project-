@@ -46,6 +46,8 @@ After introducing the resistor into the circuit, neither the cyan nor the magent
 2. Verified that both LED cathodes (short legs) connect to the left side of the resistor.
 3. Confirmed that both LEDs successfully illuminate through the resistor when the pushbutton is held down.
 
+
+## Date: August 16, 2026
 ### What Was Added
 This update expands the Raspberry Pi Pico embedded control system by integrating a Common-Cathode RGB LED using multi-channel Pulse Width Modulation (PWM). The microcontroller concurrently handles GPIO input polling for standard indicator LEDs while executing a non-blocking color transition sequence across a predefined 8-bit RGB color palette.
 
