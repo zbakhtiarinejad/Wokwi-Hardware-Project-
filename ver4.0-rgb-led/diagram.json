@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-pi-pico", "id": "pico", "top": -3.15, "left": 51.6, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": -3.6,
+      "left": -63.4,
+      "attrs": { "color": "cyan" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -51.6,
+      "left": -34.6,
+      "attrs": { "color": "magenta" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 119.15,
+      "left": -48,
+      "attrs": { "value": "1000" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": -128.2,
+      "left": 0,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-rgb-led",
+      "id": "rgb1",
+      "top": -34.4,
+      "left": 183.5,
+      "attrs": { "common": "cathode" }
+    }
+  ],
+  "connections": [
+    [ "led1:A", "pico:GP5", "green", [ "v0" ] ],
+    [ "led1:C", "r1:1", "black", [ "v0" ] ],
+    [ "led2:A", "pico:GP4", "green", [ "v0" ] ],
+    [ "btn1:1.l", "pico:GP14", "green", [ "h0" ] ],
+    [ "btn1:2.l", "pico:3V3", "black", [ "h0" ] ],
+    [ "pico:GND.2", "r1:2", "black", [ "h0" ] ],
+    [ "led2:C", "r1:1", "black", [ "v0" ] ],
+    [ "rgb1:R", "pico:GP16", "red", [ "v0" ] ],
+    [ "rgb1:COM", "pico:GND.5", "black", [ "v143.6", "h-57.5", "v9.6" ] ],
+    [ "rgb1:G", "pico:GP17", "green", [ "v0" ] ],
+    [ "rgb1:B", "pico:GP18", "blue", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
